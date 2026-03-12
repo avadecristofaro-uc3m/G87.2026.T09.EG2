@@ -1,9 +1,12 @@
+"""Module """
 from unittest import TestCase
 import hashlib
 import json
 from pathlib import Path
 
 from uc3m_consulting.enterprise_manager import EnterpriseManager
+
+
 class TestEnterpriseManager(TestCase):
     """Valid test cases for Method 2: register_document."""
 
