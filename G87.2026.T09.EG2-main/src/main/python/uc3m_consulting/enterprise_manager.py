@@ -1,5 +1,5 @@
 """Module """
-from uc3m_consulting import EnterpriseProject
+from .enterprise_project import EnterpriseProject
 
 
 class EnterpriseManager:
@@ -9,7 +9,7 @@ class EnterpriseManager:
 
 
     # develop method as you write test cases
-    def register_project(company_cif: str, project_achronym: str, project_description: str, department: str, date: str, budget: float):
+    def register_project(self,company_cif: str, project_achronym: str, project_description: str, department: str, date: str, budget: float):
         objProject = EnterpriseProject(company_cif, project_achronym, project_description, department, date, budget) # replace with actual params
         return objProject.project_id
     @staticmethod
