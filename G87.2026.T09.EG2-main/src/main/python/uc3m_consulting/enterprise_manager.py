@@ -1,4 +1,7 @@
 """Module """
+import hashlib
+import json
+
 from .enterprise_project import EnterpriseProject
 
 
@@ -17,3 +20,20 @@ class EnterpriseManager:
         """RETURNs TRUE IF THE IBAN RECEIVED IS VALID SPANISH IBAN,
         OR FALSE IN OTHER CASE"""
         return True
+
+    def register_document(self, input_file: str):
+        """RETURNS SHA-256 SIGNATURE STRING AND JSON FILE
+        IF SUCCESSFUL, OR ENTERPRISEMANAGEMENTEXCEPTION
+        IN OTHER CASE"""
+        with open(input_file, "r", encoding="utf-8") as file:
+            input_data = json.load(file)
+
+        project_id = input_data["PROJECT_ID"]
+        file_name = input_data["FILENAME"]
+
+        text_to_hash = (
+            f"{{alg:SHA-256, typ:DOCUMENT, "
+            f"project_id:{project_id}, file_name:{file_name}}}"
+        )
+
+        return hashlib.sha256(text_to_hash.encode("utf-8")).hexdigest()
