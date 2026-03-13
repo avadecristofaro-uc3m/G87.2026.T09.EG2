@@ -1,6 +1,7 @@
 """class for testing the regsiter_order method"""
 import unittest
 from uc3m_consulting import EnterpriseManager
+from uc3m_consulting import EnterpriseManagementException
 
 class MyTestCase(unittest.TestCase):
     """class for testing the register_order method"""
@@ -130,6 +131,206 @@ class MyTestCase(unittest.TestCase):
         obj = EnterpriseManager()
         value = obj.register_project("B12345678", "PRO01", "ArtQuestXR", "HR", "01/01/2025", 1000000.00)
         self.assertEqual(value, "1ce6af3f1664e79e53d418c7eaaef07d")
+
+    def test_tc22(self):
+        """invalid test case"""
+        obj = EnterpriseManager()
+        with self.assertRaises(EnterpriseManagementException) as cm:
+            obj.register_project(12, "PRO01", "ArtQuestXR", "HR", "01/01/2025", 1000000.00)
+
+        self.assertEqual("Invalid CIF", str(cm.exception))
+
+    def test_tc23(self):
+        """invalid test case"""
+        obj = EnterpriseManager()
+        with self.assertRaises(EnterpriseManagementException) as cm:
+            obj.register_project("12345678", "PRO01", "ArtQuestXR", "HR", "01/01/2025", 1000000.00)
+
+        self.assertEqual("Invalid CIF", str(cm.exception))
+
+    def test_tc24(self):
+        """invalid test case"""
+        obj = EnterpriseManager()
+        with self.assertRaises(EnterpriseManagementException) as cm:
+            obj.register_project("1234567810", "PRO01", "ArtQuestXR", "HR", "01/01/2025", 1000000.00)
+
+        self.assertEqual("Invalid CIF", str(cm.exception))
+
+    def test_tc25(self):
+        """invalid test case"""
+        obj = EnterpriseManager()
+        with self.assertRaises(EnterpriseManagementException) as cm:
+            obj.register_project("B12345678", 12, "ArtQuestXR", "HR", "01/01/2025", 1000000.00)
+
+        self.assertEqual("Invalid project acronym", str(cm.exception))
+
+    def test_tc26(self):
+        """invalid test case"""
+        obj = EnterpriseManager()
+        with self.assertRaises(EnterpriseManagementException) as cm:
+            obj.register_project("B12345678", "PRO0", "ArtQuestXR", "HR", "01/01/2025", 1000000.00)
+
+        self.assertEqual("Invalid project acronym", str(cm.exception))
+
+    def test_tc27(self):
+        """invalid test case"""
+        obj = EnterpriseManager()
+        with self.assertRaises(EnterpriseManagementException) as cm:
+            obj.register_project("B12345678", "PRO01111111", "ArtQuestXR", "HR", "01/01/2025", 1000000.00)
+
+        self.assertEqual("Invalid project acronym", str(cm.exception))
+
+    def test_tc28(self):
+        """invalid test case"""
+        obj = EnterpriseManager()
+        with self.assertRaises(EnterpriseManagementException) as cm:
+            obj.register_project("B12345678", "PRO0!", "ArtQuestXR", "HR", "01/01/2025", 1000000.00)
+
+        self.assertEqual("Invalid project acronym", str(cm.exception))
+
+    def test_tc29(self):
+        """invalid test case"""
+        obj = EnterpriseManager()
+        with self.assertRaises(EnterpriseManagementException) as cm:
+            obj.register_project("B12345678", "PRO01", "Code LabX", "HR", "01/01/2025", 1000000.00)
+
+        self.assertEqual("Invalid project description", str(cm.exception))
+
+    def test_tc30(self):
+        """invalid test case"""
+        obj = EnterpriseManager()
+        with self.assertRaises(EnterpriseManagementException) as cm:
+            obj.register_project("B12345678", "PRO01", "Immersive coding workshop hub!!", "HR", "01/01/2025", 1000000.00)
+
+        self.assertEqual("Invalid project description", str(cm.exception))
+
+    def test_tc31(self):
+        """invalid test case"""
+        obj = EnterpriseManager()
+        with self.assertRaises(EnterpriseManagementException) as cm:
+            obj.register_project("B12345678", "PRO01", 12, "HR", "01/01/2025", 1000000.00)
+
+        self.assertEqual("Invalid project description", str(cm.exception))
+
+    def test_tc32(self):
+        """invalid test case"""
+        obj = EnterpriseManager()
+        with self.assertRaises(EnterpriseManagementException) as cm:
+            obj.register_project("B12345678", "PRO01", "ArtQuestXR", 12, "01/01/2025", 1000000.00)
+
+        self.assertEqual("Invalid department", str(cm.exception))
+
+    def test_tc33(self):
+        """invalid test case"""
+        obj = EnterpriseManager()
+        with self.assertRaises(EnterpriseManagementException) as cm:
+            obj.register_project("B12345678", "PRO01", "ArtQuestXR", "other", "01/01/2025", 1000000.00)
+
+        self.assertEqual("Invalid department", str(cm.exception))
+
+    def test_tc34(self):
+        """invalid test case"""
+        obj = EnterpriseManager()
+        with self.assertRaises(EnterpriseManagementException) as cm:
+            obj.register_project("B12345678", "PRO01", "ArtQuestXR", "HR", 12, 1000000.00)
+
+        self.assertEqual("Invalid date", str(cm.exception))
+
+    def test_tc35(self):
+        """invalid test case"""
+        obj = EnterpriseManager()
+        with self.assertRaises(EnterpriseManagementException) as cm:
+            obj.register_project("B12345678", "PRO01", "ArtQuestXR", "HR", "1/1/2025", 1000000.00)
+
+        self.assertEqual("Invalid date", str(cm.exception))
+
+    def test_tc36(self):
+        """invalid test case"""
+        obj = EnterpriseManager()
+        with self.assertRaises(EnterpriseManagementException) as cm:
+            obj.register_project("B12345678", "PRO01", "ArtQuestXR", "HR", "00/01/2025", 1000000.00)
+
+        self.assertEqual("Invalid date", str(cm.exception))
+
+    def test_tc37(self):
+        """invalid test case"""
+        obj = EnterpriseManager()
+        with self.assertRaises(EnterpriseManagementException) as cm:
+            obj.register_project("B12345678", "PRO01", "ArtQuestXR", "HR", "32/01/2025", 1000000.00)
+
+        self.assertEqual("Invalid date", str(cm.exception))
+
+    def test_tc38(self):
+        """invalid test case"""
+        obj = EnterpriseManager()
+        with self.assertRaises(EnterpriseManagementException) as cm:
+            obj.register_project("B12345678", "PRO01", "ArtQuestXR", "HR", "01/00/2025", 1000000.00)
+
+        self.assertEqual("Invalid date", str(cm.exception))
+
+    def test_tc39(self):
+        """invalid test case"""
+        obj = EnterpriseManager()
+        with self.assertRaises(EnterpriseManagementException) as cm:
+            obj.register_project("B12345678", "PRO01", "ArtQuestXR", "HR", "01/13/2025", 1000000.00)
+
+        self.assertEqual("Invalid date", str(cm.exception))
+
+    def test_tc40(self):
+        """invalid test case"""
+        obj = EnterpriseManager()
+        with self.assertRaises(EnterpriseManagementException) as cm:
+            obj.register_project("B12345678", "PRO01", "ArtQuestXR", "HR", "01/01/2024", 1000000.00)
+
+        self.assertEqual("Invalid date", str(cm.exception))
+
+    def test_tc41(self):
+        """invalid test case"""
+        obj = EnterpriseManager()
+        with self.assertRaises(EnterpriseManagementException) as cm:
+            obj.register_project("B12345678", "PRO01", "ArtQuestXR", "HR", "01/01/2028", 1000000.00)
+
+        self.assertEqual("Invalid date", str(cm.exception))
+
+    def test_tc42(self):
+        """invalid test case"""
+        obj = EnterpriseManager()
+        with self.assertRaises(EnterpriseManagementException) as cm:
+            obj.register_project("B12345678", "PRO01", "ArtQuestXR", "HR", "01/01/2025", "string")
+
+        self.assertEqual("Invalid budget", str(cm.exception))
+
+    def test_tc43(self):
+        """invalid test case"""
+        obj = EnterpriseManager()
+        with self.assertRaises(EnterpriseManagementException) as cm:
+            obj.register_project("B12345678", "PRO01", "ArtQuestXR", "HR", "01/01/2025", 49999.99)
+
+        self.assertEqual("Invalid budget", str(cm.exception))
+
+    def test_tc44(self):
+        """invalid test case"""
+        obj = EnterpriseManager()
+        with self.assertRaises(EnterpriseManagementException) as cm:
+            obj.register_project("B12345678", "PRO01", "ArtQuestXR", "HR", "01/01/2025", 1000000.01)
+
+        self.assertEqual("Invalid budget", str(cm.exception))
+
+    def test_tc45(self):
+        """invalid test case"""
+        obj = EnterpriseManager()
+        with self.assertRaises(EnterpriseManagementException) as cm:
+            obj.register_project("B12345678", "PRO01", "ArtQuestXR", "HR", "01/01/2025", 53123)
+
+        self.assertEqual("Invalid budget", str(cm.exception))
+
+    def test_tc46(self):
+        """invalid test case"""
+        obj = EnterpriseManager()
+        with self.assertRaises(EnterpriseManagementException) as cm:
+            obj.register_project("B12345678", "PRO01", "ArtQuestXR", "HR", "01/01/2025", 5234523.1)
+
+        self.assertEqual("Invalid budget", str(cm.exception))
 
 
 if __name__ == '__main__':
