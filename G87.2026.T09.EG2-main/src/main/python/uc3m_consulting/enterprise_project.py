@@ -27,7 +27,7 @@ class EnterpriseProject:
         return "Project:" + json.dumps(self.__dict__)
 
     def to_json(self):
-        """returns the object information in json format"""
+        """returns the object information in JSON format"""
         return {
             "company_cif": self.__company_cif,
             "project_description": self.__project_description,

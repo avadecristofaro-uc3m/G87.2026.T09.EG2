@@ -5,6 +5,7 @@ import re
 
 from datetime import datetime
 
+from . import ProjectDocument
 from .enterprise_project import EnterpriseProject
 from .enterprise_management_exception import EnterpriseManagementException
 
@@ -110,19 +111,136 @@ class EnterpriseManager:
         if round(budget, 2) != budget:
             raise EnterpriseManagementException("Invalid budget")
 
-    def register_document(self, input_file: str):
-        """RETURNS SHA-256 SIGNATURE STRING AND JSON FILE
-        IF SUCCESSFUL, OR ENTERPRISEMANAGEMENTEXCEPTION
-        IN OTHER CASE"""
-        with open(input_file, "r", encoding="utf-8") as file:
-            input_data = json.load(file)
+    @staticmethod
+    def _json_object_pairs_hook(pairs):
+        """Parse JSON while detecting duplicate fields."""
+        seen_keys = set()
+        data = {}
+
+        for key, value in pairs:
+            if key in seen_keys:
+                if key == "PROJECT_ID":
+                    raise EnterpriseManagementException(
+                        "JSON does not have the expected structure: duplicate field <PROJECT_ID>"
+                    )
+                if key == "FILENAME":
+                    raise EnterpriseManagementException(
+                        "JSON does not have the expected structure: duplicate field <FILENAME>"
+                    )
+            seen_keys.add(key)
+            data[key] = value
+
+        if not data:
+            raise EnterpriseManagementException(
+                "JSON does not have the expected structure: missing <FIELDS>"
+            )
+
+        return data
+
+    @staticmethod
+    def _validate_document_project_id(project_id: str) -> None:
+        if not isinstance(project_id, str) or not re.fullmatch(r"[0-9a-fA-F]{32}", project_id):
+            raise EnterpriseManagementException(
+                "JSON data has no valid values: invalid PROJECT_ID value"
+            )
+
+    @staticmethod
+    def _validate_document_filename(file_name: str) -> None:
+        if not isinstance(file_name, str):
+            raise EnterpriseManagementException(
+                "JSON data has no valid values: invalid EXTENSION"
+            )
+
+        parts = file_name.split(".")
+        if len(parts) != 2:
+            raise EnterpriseManagementException(
+                "JSON data has no valid values: invalid EXTENSION"
+            )
+
+        name, extension = parts[0], "." + parts[1]
+
+        if not re.fullmatch(r"[A-Za-z0-9]{8}", name):
+            raise EnterpriseManagementException(
+                "JSON data has no valid values: invalid char in NAME field"
+            )
+
+        if extension not in {".pdf", ".docx", ".xlsx"}:
+            raise EnterpriseManagementException(
+                "JSON data has no valid values: invalid EXTENSION"
+            )
+
+    def register_document(self, input_file: str) -> str:
+        """Registers a document and returns its SHA-256 signature."""
+        try:
+            with open(input_file, "r", encoding="utf-8") as file:
+                input_data = json.load(
+                    file,
+                    object_pairs_hook=self._json_object_pairs_hook
+                )
+        except FileNotFoundError as exc:
+            raise EnterpriseManagementException("Input file not found.") from exc
+        except json.JSONDecodeError as exc:
+            if "Expecting ',' delimiter" in str(exc):
+                raise EnterpriseManagementException(
+                    "JSON does not have the expected structure: missing <SEPARATOR>"
+                ) from exc
+            raise EnterpriseManagementException("The file is not JSON formatted.") from exc
+
+        keys = set(input_data.keys())
+
+        if not keys:
+            raise EnterpriseManagementException(
+                "JSON does not have the expected structure: missing <FIELDS>"
+            )
+
+        if "PROJECT_ID" not in input_data:
+            if keys == {"FILENAME"}:
+                raise EnterpriseManagementException(
+                    "JSON does not have the expected structure: missing <PROJECT_ID>"
+                )
+            raise EnterpriseManagementException(
+                "JSON data has no valid values: invalid PROJECT_ID label"
+            )
+
+        if "FILENAME" not in input_data:
+            if keys == {"PROJECT_ID"}:
+                raise EnterpriseManagementException(
+                    "JSON does not have the expected structure: missing <FILENAME>"
+                )
+            raise EnterpriseManagementException(
+                "JSON data has no valid values: invalid FILENAME label"
+            )
 
         project_id = input_data["PROJECT_ID"]
         file_name = input_data["FILENAME"]
 
-        text_to_hash = (
-            f"{{alg:SHA-256, typ:DOCUMENT, "
-            f"project_id:{project_id}, file_name:{file_name}}}"
-        )
+        self._validate_document_project_id(project_id)
+        self._validate_document_filename(file_name)
 
-        return hashlib.sha256(text_to_hash.encode("utf-8")).hexdigest()
+        try:
+            document = ProjectDocument(project_id, file_name)
+            file_signature = document.file_signature
+        except Exception as exc:
+            raise EnterpriseManagementException(
+                "Internal processing error when getting the file_signature."
+            ) from exc
+
+        try:
+            try:
+                with open("all_documents.json", "r", encoding="utf-8") as file:
+                    all_documents = json.load(file)
+                    if not isinstance(all_documents, list):
+                        all_documents = []
+            except FileNotFoundError:
+                all_documents = []
+
+            all_documents.append(document.to_json())
+
+            with open("all_documents.json", "w", encoding="utf-8") as file:
+                json.dump(all_documents, file, indent=4)
+        except Exception as exc:
+            raise EnterpriseManagementException(
+                "Internal processing error when getting the file_signature."
+            ) from exc
+
+        return file_signature

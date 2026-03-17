@@ -1,32 +1,38 @@
 """Contains the class OrderShipping"""
-from datetime import datetime, timezone
 import hashlib
+from datetime import datetime, timezone
+from freezegun import freeze_time
+
 
 class ProjectDocument():
     """Class representing the information required for shipping of an order"""
 
+    @freeze_time("16/03/2026")
     def __init__(self, project_id: str, file_name):
         self.__alg = "SHA-256"
-        self.__type = "DEPOSIT"
+        self.__typ = "DOCUMENT"
         self.__project_id = project_id
         self.__file_name = file_name
         justnow = datetime.now(timezone.utc)
         self.__register_date = datetime.timestamp(justnow)
 
     def to_json(self):
-        """returns the object data in json format"""
+        """returns the object data in JSON format"""
         return {"alg": self.__alg,
-                "type": self.__type,
+                "type": self.__typ,
                 "project_id": self.__project_id,
                 "file_name": self.__file_name,
                 "register_date": self.__register_date,
-                "document_signature": self.document_signature}
+                "file_signature": self.file_signature}
 
     def __signature_string(self):
         """Composes the string to be used for generating the key for the date"""
-        return "{alg:" + str(self.__alg) +",typ:" + str(self.__type) +",project_id:" + \
-               str(self.__project_id) + ",file_name:" + str(self.__file_name) + \
-               ",register_date:" + str(self.__register_date) + "}"
+        return (
+                "{alg:" + str(self.__alg)
+                + ", typ:" + str(self.__typ)
+                + ", project_id:" + str(self.__project_id)
+                + ", file_name:" + str(self.__file_name) + "}"
+        )
 
     @property
     def project_id(self):
@@ -55,6 +61,6 @@ class ProjectDocument():
 
 
     @property
-    def document_signature(self):
+    def file_signature(self):
         """Returns the sha256 signature of the date"""
         return hashlib.sha256(self.__signature_string().encode()).hexdigest()

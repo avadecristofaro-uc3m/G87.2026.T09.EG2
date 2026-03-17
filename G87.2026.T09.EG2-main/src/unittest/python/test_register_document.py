@@ -1,5 +1,6 @@
 """Module """
 from unittest import TestCase
+from unittest.mock import patch, PropertyMock
 import hashlib
 import json
 from pathlib import Path
@@ -235,8 +236,13 @@ class TestRegisterDocument(TestCase):
         manager = EnterpriseManager()
         json_path = self.get_json_path("invalid", "tc16-valid_for_signature_error.json")
 
-        with self.assertRaises(EnterpriseManagementException) as context:
-            manager.register_document(str(json_path))
+        with patch(
+                "uc3m_consulting.enterprise_manager.ProjectDocument.file_signature",
+                new_callable=PropertyMock,
+                side_effect=Exception("Forced signature error")
+        ):
+            with self.assertRaises(EnterpriseManagementException) as context:
+                manager.register_document(str(json_path))
 
         self.assertEqual(
             "Internal processing error when getting the file_signature.",
