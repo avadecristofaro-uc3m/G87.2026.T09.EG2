@@ -318,5 +318,29 @@
         "file_name": "File1234.xlsx",
         "register_date": 1773619200.0,
         "file_signature": "2609fc088a47dff0da1e1004a6cc17dcb614edc2fcc146677831ab7d93d0987a"
+    },
+    {
+        "alg": "SHA-256",
+        "type": "DOCUMENT",
+        "project_id": "deca2698d32baefe542ef5c3ba8236a2",
+        "file_name": "File1234.pdf",
+        "register_date": 1773619200.0,
+        "file_signature": "5771041b7746580d20c491b004fdc34fac914dddcb75fed9c19165ece809d7c8"
+    },
+    {
+        "alg": "SHA-256",
+        "type": "DOCUMENT",
+        "project_id": "deca2698d32baefe542ef5c3ba8236a2",
+        "file_name": "File1234.docx",
+        "register_date": 1773619200.0,
+        "file_signature": "77dfa10d2b667b499d2de86f9ffae784f3582ca58228807696a2744f1af03e19"
+    },
+    {
+        "alg": "SHA-256",
+        "type": "DOCUMENT",
+        "project_id": "deca2698d32baefe542ef5c3ba8236a2",
+        "file_name": "File1234.xlsx",
+        "register_date": 1773619200.0,
+        "file_signature": "2609fc088a47dff0da1e1004a6cc17dcb614edc2fcc146677831ab7d93d0987a"
     }
 ]

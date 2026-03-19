@@ -1,5 +1,8 @@
 """class for testing the regsiter_order method"""
+import json
 import unittest
+import os
+from unittest.mock import patch
 from uc3m_consulting import EnterpriseManager
 from uc3m_consulting import EnterpriseManagementException
 
@@ -331,6 +334,42 @@ class MyTestCase(unittest.TestCase):
             obj.register_project("B12345678", "PRO01", "ArtQuestXR", "HR", "01/01/2025", 5234523.1)
 
         self.assertEqual("Invalid budget", str(cm.exception))
+
+    def test_tc47(self):
+        """valid creation of JSON file"""
+        obj = EnterpriseManager()
+
+        # If file already exists, remove it
+        if os.path.exists("corporate_operations.json"):
+            os.remove("corporate_operations.json")
+
+        result = obj.register_project(
+            "B12345678",
+            "PRO01",
+            "ArtQuestXR",
+            "HR",
+            "01/01/2025",
+            50000.00
+        )
+
+        self.assertTrue(os.path.exists("corporate_operations.json"))
+
+    def test_tc48_json_file_not_outputted(self):
+        obj = EnterpriseManager()
+
+        # mock a FileNotFoundError to be raised
+        with patch("builtins.open", side_effect=FileNotFoundError):
+            with self.assertRaises(EnterpriseManagementException) as context:
+                obj.register_project(
+                    "B12345678",
+                    "PRO01",
+                    "ArtQuestXR",
+                    "HR",
+                    "01/01/2025",
+                    50000.00
+                )
+
+        self.assertEqual("File not found", str(context.exception))
 
 
 if __name__ == '__main__':

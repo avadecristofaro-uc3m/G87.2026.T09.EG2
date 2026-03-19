@@ -1,7 +1,7 @@
 """Module """
-import hashlib
 import json
 import re
+import os
 
 from datetime import datetime
 
@@ -38,15 +38,43 @@ class EnterpriseManager:
 
         try:
             project = EnterpriseProject(
+                # raise exception if CIF is invalid
                 company_cif=company_cif,
+                # raise exception if achronym is invalid
                 project_acronym=project_achronym,
+                # raise exception if description is invalid
                 project_description=project_description,
+                # raise exception if department is invalid
                 department=department,
+                # raise exception if date is invalid
                 starting_date=date,
+                # raise exception if budget is invalid
                 project_budget=budget
             )
         except Exception as exc:
             raise EnterpriseManagementException("Error creating project") from exc
+
+        # Check for JSON output file with project data
+        file_path = "corporate_operations.json"
+        try:
+            if os.path.exists(file_path):
+                with open(file_path, "r") as infile:
+                    data_list = json.load(infile)
+            else:
+                data_list = []
+
+            # Convert project to JSON obj
+            project_data = project.to_json()
+
+            data_list.append(project_data)
+
+            # Write back to file
+            with open(file_path, "w", encoding="utf-8") as outfile:
+                json.dump(data_list, outfile, indent=4)
+
+
+        except (FileNotFoundError, PermissionError, OSError) as exc:
+            raise EnterpriseManagementException("File not found") from exc
 
         return project.project_id
 
