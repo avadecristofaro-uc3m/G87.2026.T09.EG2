@@ -1,0 +1,41 @@
+PyBuilder version 0.13.18
+Build started at 2026-03-26 19:47:44
+------------------------------------------------------------
+[INFO]  Building G8X.2026.TXX.EG2 version 1.0.dev0
+[INFO]  Executing build in c:\users\adria\softwaredevelopment\g87.2026.t09.eg2\g87.2026.t09.eg2-main
+[INFO]  Going to execute task publish
+[INFO]  Processing plugin packages 'coverage>=6.0' to be installed with {'upgrade': True}
+[INFO]  Processing plugin packages 'unittest-xml-reporting>=3.0.4' to be installed with {'upgrade': True}
+[INFO]  Creating target 'build' VEnv in 'c:\users\adria\softwaredevelopment\g87.2026.t09.eg2\g87.2026.t09.eg2-main\target\venv\build\cpython-3.11.5.final.0'
+[INFO]  Creating target 'test' VEnv in 'c:\users\adria\softwaredevelopment\g87.2026.t09.eg2\g87.2026.t09.eg2-main\target\venv\test\cpython-3.11.5.final.0'
+[INFO]  Requested coverage for tasks: pybuilder.plugins.python.unittest_plugin:run_unit_tests
+[INFO]  Running unit tests
+[INFO]  Executing unit tests from Python modules in c:\users\adria\softwaredevelopment\g87.2026.t09.eg2\g87.2026.t09.eg2-main\src\unittest\python
+[INFO]  Executed 48 unit tests
+[INFO]  All unit tests passed.
+[INFO]  Building distribution in c:\users\adria\softwaredevelopment\g87.2026.t09.eg2\g87.2026.t09.eg2-main\target\dist\g8x.2026.txx.eg2-1.0.dev0
+[INFO]  Copying scripts to c:\users\adria\softwaredevelopment\g87.2026.t09.eg2\g87.2026.t09.eg2-main\target\dist\g8x.2026.txx.eg2-1.0.dev0\scripts
+[INFO]  Collecting coverage information for 'pybuilder.plugins.python.unittest_plugin:run_unit_tests'
+[WARN]  ut_coverage_branch_threshold_warn is 0 and branch coverage will not be checked
+[WARN]  ut_coverage_branch_partial_threshold_warn is 0 and partial branch coverage will not be checked
+[INFO]  Running unit tests
+[INFO]  Executing unit tests from Python modules in c:\users\adria\softwaredevelopment\g87.2026.t09.eg2\g87.2026.t09.eg2-main\src\unittest\python
+[INFO]  Executed 48 unit tests
+[INFO]  All unit tests passed.
+[WARN]  Test coverage below 70% for uc3m_consulting.enterprise_manager: 52%
+[WARN]  Test coverage below 70% for uc3m_consulting.main:  0%
+[WARN]  Test coverage below 70% for uc3m_consulting.project_document: 59%
+[WARN]  Overall pybuilder.plugins.python.unittest_plugin.run_unit_tests coverage is below 70%: 60%
+[INFO]  Overall pybuilder.plugins.python.unittest_plugin.run_unit_tests branch coverage is 42%
+[INFO]  Overall pybuilder.plugins.python.unittest_plugin.run_unit_tests partial branch coverage is 98%
+[WARN]  Test coverage below 70% for uc3m_consulting.enterprise_manager: 52%
+[WARN]  Test coverage below 70% for uc3m_consulting.main:  0%
+[WARN]  Test coverage below 70% for uc3m_consulting.project_document: 59%
+[WARN]  Overall G8X.2026.TXX.EG2 coverage is below 70%: 60%
+[INFO]  Overall G8X.2026.TXX.EG2 branch coverage is 42%
+[INFO]  Overall G8X.2026.TXX.EG2 partial branch coverage is 98%
+------------------------------------------------------------
+BUILD FAILED - Test coverage for at least one module is below 70% (lib\site-packages\pybuilder\plugins\python\coverage_plugin.py:157)
+------------------------------------------------------------
+Build finished at 2026-03-26 19:48:08
+Build took 24 seconds (24086 ms)
